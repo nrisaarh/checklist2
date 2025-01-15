@@ -36,7 +36,7 @@
                     </div>
                     <div class="form-group">
                         <label for="pic">Pilih PIC:</label>
-                        <select name="pic" id="pic" class="form-control mb-3" required>
+                        <select name="pic" id="pic" class="form-control" required>
                             <option value="">-- Pilih PIC --</option>
                             @foreach ($pics as $pic)
                                 <option value="{{ $checklist->picRelation->name ?? '-' }}" {{ old('pic') == $pic->name ? 'selected' : '' }}>
