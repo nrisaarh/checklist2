@@ -24,13 +24,21 @@ class ChecklistController extends Controller
  public function store(Request $request)
  {
     $validated = $request->validate([
-        'year' => 'required|integer|between:2018,2025',
+        'year' => 'required|numeric',
         'item' => 'required|string',
-        'pic' => 'required|exists:pics,name',
+        'pic' => 'nullable|string',
+        'new_pic' => 'nullable|string',
         'status' => 'required|string',
         'note' => 'nullable|string',
         'month' => 'required|integer|min:1|max:12',
     ]);
+     // Tambahkan PIC baru jika diisi
+     if ($request->filled('new_pic')) {
+        $newPic = Pic::create(['name' => $request->new_pic]);
+        $request->merge(['pic' => $newPic->name]); // Gunakan PIC baru
+    }
+    
+    // Simpan checklist
     Checklist::create([
         'year' => $validated['year'],
         'item' => $validated['item'],
@@ -40,7 +48,7 @@ class ChecklistController extends Controller
         'month' => $validated['month'],
     ]);
 
-    return redirect()->back()->with('success', 'Checklist berhasil disimpan!');
+    return redirect()->route('checklists.index')->with('success', 'Checklist berhasil ditambahkan.');
 }
 
  // Form edit checklist

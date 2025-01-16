@@ -1,0 +1,12 @@
+.delete-icon {
+    margin-left: 10px;
+    font-size: 1.2rem;
+    color: darkgray;
+    cursor: pointer;
+    transition: color 0.3s ease, transform 0.2s ease;
+}
+
+.delete-icon:hover {
+    color: red;
+    transform: rotate(15deg) scale(1.2);
+}

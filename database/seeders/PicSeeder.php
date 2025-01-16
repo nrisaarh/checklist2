@@ -10,7 +10,7 @@ class PicSeeder extends Seeder
 {
     public function run()
     {
-        $pics = ['Mifta', 'Tegar', 'Budi', 'Siti', 'Andi'];
+        $pics = ['Mifta', 'Tegar'];
         foreach ($pics as $name) {
             Pic::create(['name' => $name]);
         }
