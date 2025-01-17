@@ -10,7 +10,7 @@ class PicController extends Controller
     public function index()
     {
         $pics = Pic::all(); // Ambil semua data PIC dari database
-        return view('pic.index', compact('pics')); // Kirim data ke view
+        return view('index', compact('pics')); // Kirim data ke view
     }
 
     public function store(Request $request)

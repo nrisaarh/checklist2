@@ -62,11 +62,18 @@ class ChecklistController extends Controller
  public function update(Request $request, $id)
  {
      $checklist = Checklist::findOrFail($id);
-     $checklist->update($request->all());
-     return redirect()->route('index')->with('success', 'Checklist berhasil diperbarui!');
- }
+      // Ambil bulan yang dicentang dari form
+    $completedMonths = array_keys($request->input('month_check', []));
 
- // Hapus checklist
+    // Ambil bulan yang dicentang dari form
+    $completedMonths = array_keys($request->input('month_check', []));
+
+    // Simpan bulan yang selesai ke database
+    $checklist->completed_months = $completedMonths;
+    $checklist->save();
+
+    return redirect()->back()->with('success', 'Checklist berhasil diperbarui.');
+}
  public function destroy($id)
  {
      $checklist = Checklist::findOrFail($id);
