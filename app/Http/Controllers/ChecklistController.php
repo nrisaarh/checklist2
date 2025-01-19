@@ -5,15 +5,19 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Checklist;
 use App\Models\Pic;
+use App\Models\Year;
 
 class ChecklistController extends Controller
 {
     public function index()
     {
+        $years = Year::all(); // Mengambil semua tahun dari model Year
         $checklists = Checklist::all();
         $pics = Pic::all(); // Ambil semua data PIC
-        return view('index', compact('checklists', 'pics'));
+        return view('checklists.index', compact('years','checklists', 'pics'));
     }
+
+
  // Form tambah checklist
  public function create()
  { 
@@ -23,15 +27,16 @@ class ChecklistController extends Controller
  // Simpan checklist baru
  public function store(Request $request)
  {
-    $validated = $request->validate([
+    $validatedData = $request->validate([
         'year' => 'required|numeric',
         'item' => 'required|string',
-        'pic' => 'nullable|string',
+        'pic' => 'required|string',
         'new_pic' => 'nullable|string',
-        'status' => 'required|string',
+        'status' => 'nullable|string',
         'note' => 'nullable|string',
         'month' => 'required|integer|min:1|max:12',
     ]);
+    
      // Tambahkan PIC baru jika diisi
      if ($request->filled('new_pic')) {
         $newPic = Pic::create(['name' => $request->new_pic]);
@@ -39,14 +44,7 @@ class ChecklistController extends Controller
     }
     
     // Simpan checklist
-    Checklist::create([
-        'year' => $validated['year'],
-        'item' => $validated['item'],
-        'pic' => $validated['pic'],
-        'status' => $validated['status'],
-        'note' => $validated['note'],
-        'month' => $validated['month'],
-    ]);
+    Checklist::create($validatedData);
 
     return redirect()->route('checklists.index')->with('success', 'Checklist berhasil ditambahkan.');
 }
@@ -74,6 +72,7 @@ class ChecklistController extends Controller
 
     return redirect()->back()->with('success', 'Checklist berhasil diperbarui.');
 }
+
  public function destroy($id)
  {
      $checklist = Checklist::findOrFail($id);
